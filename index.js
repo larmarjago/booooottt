@@ -1,6 +1,6 @@
-const { Telegraf, Scenes, session, Markup } = require("telegraf");
+const { Telegraf, Scenes, session, Markup,  } = require("telegraf");
 const bot = new Telegraf("7643827804:AAEGsdEbKAfPn5sTygDdsdlR52EwxkpqseI");
-const groupChatId = "1002714637390"; 
+const groupChatId = "-1002714637390"; 
 const { BaseScene, Stage } = Scenes;
 const { message } = require("telegraf/filters");
 const fs = require("fs");
@@ -204,7 +204,9 @@ bot.command("track_case", (ctx) => {
   }
 });
 
-bot.launch();
+bot.launch(() => {
+  
+});
 
 // bot.start((ctx) => {
 //   const username = ctx.from.username;
