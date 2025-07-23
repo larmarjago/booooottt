@@ -41,7 +41,9 @@ const fs = require("fs");
 // });
 const storyScene = new BaseScene("storyScene");
 storyScene.enter((ctx) =>
-  ctx.reply("Please tell us what happened. Give as much detail as you can.")
+  ctx.reply(`📝 Briefly describe the scam incident: \n\n` +
+
+    `Please tell us what happened in your own words. Include any names, conversations, or actions that led to the scam.`)
 );
 storyScene.on("text", (ctx) => {
   ctx.session.story = ctx.message.text;
@@ -51,7 +53,7 @@ storyScene.on("text", (ctx) => {
 const scamTypeScene = new BaseScene("scamTypeScene");
 scamTypeScene.enter((ctx) =>
   ctx.reply(
-    "Select the type of scam:",
+    "📂 Select the scam Category:",
     Markup.keyboard([
       ["Crypto", "Bank Transfer"],
       ["Romance", "Forex"],
@@ -66,7 +68,10 @@ scamTypeScene.on("text", (ctx) => {
 
 const platformScene = new BaseScene("platformScene");
 platformScene.enter((ctx) =>
-  ctx.reply("Where did the scam happen? (e.g., Instagram, WhatsApp)?")
+  ctx.reply(
+    `🌐 On which platform did the scam take place? \n\n` +
+      `For example: WhatsApp, Instagram, Telegram, Facebook, Email, Bank App, etc."`
+  )
 );
 platformScene.on("text", (ctx) => {
   ctx.session.platform = ctx.message.text;
@@ -74,7 +79,7 @@ platformScene.on("text", (ctx) => {
 });
 
 const amountScene = new BaseScene("amountScene");
-amountScene.enter((ctx) => ctx.reply("How much did you lose?"));
+amountScene.enter((ctx) => ctx.reply("💰 How much did you lose?"));
 amountScene.on("text", (ctx) => {
   ctx.session.amount = ctx.message.text;
   ctx.scene.enter("proofScene");
@@ -82,7 +87,9 @@ amountScene.on("text", (ctx) => {
 
 const proofScene = new BaseScene("proofScene");
 proofScene.enter((ctx) => {
-  ctx.reply("Upload a screenshot, receipt, or document as proof.");
+  ctx.reply(` 📸 Upload any proof you have: \n\n` +
+
+   ` Kindly upload screenshots, payment receipts, account statements, or chat evidence to support your claim.`);
 });
 
 proofScene.on("message", async (ctx) => {
@@ -130,7 +137,10 @@ proofScene.on("message", async (ctx) => {
 
     ctx.session.caseId = caseId;
 
-    await ctx.reply("✅ Your report has been received. Thank you.");
+    await ctx.reply("✅ Your report has been submitted successfully! \n\n" +
+      `Your case ID is *${caseId}*. Please keep this for your records.\n` +
+      "We will review your case and get back to you as soon as possible.",
+      { parse_mode: "Markdown" });
     await ctx.scene.leave();
   } catch (err) {
     console.error("❌ Failed to forward report:", err);
@@ -197,7 +207,9 @@ bot.command("track_case", (ctx) => {
   if (ctx.session.caseId) {
     ctx.reply(
       `🧾 Your case ID is *${ctx.session.caseId}*.\nPlease hold on while we process your report.`,
+      `contact_agent`,
       { parse_mode: "Markdown" }
+
     );
   } else {
     ctx.reply("❗ You don’t have any active case in this session.");
